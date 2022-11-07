@@ -8,7 +8,7 @@ Search by Name
 ![searchByName](https://user-images.githubusercontent.com/101566196/200429275-90be977f-7bf8-4dd9-8ee8-7e5ae27f63c5.png)
 
 Filtered by Type
-![filteredByType](https://user-images.githubusercontent.com/101566196/200429294-abcd6631-6bed-47cc-a02f-3f6c765a8df5.png)
+![filteredByType](https://user-images.githubusercontent.com/101566196/200429695-1d7ec02b-0eb8-41d2-bd74-369e5cdde082.png)
 
 Click on Info Row
 ![clickOnInfoRow](https://user-images.githubusercontent.com/101566196/200429298-34cdbe5b-2323-40a1-a602-03180ab7db57.png)
