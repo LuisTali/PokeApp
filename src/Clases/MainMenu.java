@@ -27,6 +27,7 @@ public class MainMenu extends JFrame {
         setContentPane(MainMenu);
         setSize(900,500);
         //setMinimumSize(new Dimension(850, 500));
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         styleTable();
         setComboBoxConfig();
