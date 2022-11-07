@@ -85,6 +85,7 @@
           </grid>
         </constraints>
         <properties>
+          <font name="Consolas"/>
           <model/>
         </properties>
       </component>

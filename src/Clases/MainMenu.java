@@ -43,7 +43,7 @@ public class MainMenu extends JFrame {
                 DESHACERbutton.setEnabled(false); //No permite deshacer si se ingreso un pokemon por nombre.
 
                 flag = false;
-
+                
                 infoTable((Pokemon) pkApp.getInfoPokemonByName(name));
 
             }
@@ -53,6 +53,7 @@ public class MainMenu extends JFrame {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 flag = true; //Permite cliquear un pokemon de la tabla si es que previamente se filtro por Tipo.
+                nameField.setText("");
                 typesTable();
             }
         });
