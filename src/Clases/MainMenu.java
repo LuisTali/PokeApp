@@ -1,20 +1,13 @@
 package Clases;
 
-import Clases.PokeApp;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashSet;
 import java.util.Iterator;
 
 public class MainMenu extends JFrame {
@@ -25,9 +18,10 @@ public class MainMenu extends JFrame {
     private JScrollPane infoScrollPane;
     private JComboBox comboBox1;
     private JLabel pokeLabel;
+    private JButton DESHACERbutton;
 
     PokeApp pkApp = new PokeApp();
-
+    boolean flag = true;
     public MainMenu() {
         super("PikaPika");
         setContentPane(MainMenu);
@@ -45,6 +39,10 @@ public class MainMenu extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String name = nameField.getText().toLowerCase();
 
+                DESHACERbutton.setEnabled(false); //No permite deshacer si se ingreso un pokemon por nombre.
+
+                flag = false;
+
                 infoTable((Pokemon) pkApp.getInfoPokemonByName(name));
 
             }
@@ -53,7 +51,34 @@ public class MainMenu extends JFrame {
         comboBox1.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
+                flag = true; //Permite cliquear un pokemon de la tabla si es que previamente se filtro por Tipo.
                 typesTable();
+            }
+        });
+
+        tableInfo.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(flag){ //Si flag realiza la busqueda por el nombre del Pokemon cliqueado.
+                    super.mouseClicked(e);
+                    int rowSelection = tableInfo.getSelectedRow();
+                    if (rowSelection != -1) {
+                        String name = (String) tableInfo.getValueAt(rowSelection,0);
+                        name = name.toLowerCase();
+                        infoTable((Pokemon) pkApp.getInfoPokemonByName(name));
+                        System.out.println(name);
+                        DESHACERbutton.setEnabled(true);
+                    }
+                }
+
+            }
+        });
+
+        DESHACERbutton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DESHACERbutton.setEnabled(false); //Al cliquearlo se deshabilita.
+                typesTable(); //Al deshacer se vuelve a mostrar la Tabla filtrada por Tipo.
             }
         });
     }
@@ -100,6 +125,7 @@ public class MainMenu extends JFrame {
                     ,e.getAttack(),e.getDefense(),e.getSpeed()});
         }
         tableInfo.setModel(model);
+        pokeLabel.setIcon(null);
         tableInfo.getColumnModel().getColumn(5).setPreferredWidth(40);
         tableInfo.getColumnModel().getColumn(6).setPreferredWidth(40);
         tableInfo.getColumnModel().getColumn(7).setPreferredWidth(40);
@@ -128,9 +154,8 @@ public class MainMenu extends JFrame {
             model.addRow(new Object[]{e.getName(),e.getType()
                 , e.getMove1(),e.getMove2(),e.getMove3(),e.getHp()
                 ,e.getAttack(),e.getDefense(),e.getSpeed()});
+
         }
-
-
 
         tableInfo.setModel(model);
         tableInfo.getColumnModel().getColumn(5).setPreferredWidth(40);
@@ -138,14 +163,6 @@ public class MainMenu extends JFrame {
         tableInfo.getColumnModel().getColumn(7).setPreferredWidth(40);
         tableInfo.getColumnModel().getColumn(8).setPreferredWidth(40);
         tableInfo.getTableHeader().setReorderingAllowed(false); //Hace imposible mover las columnas de lugar.
-    }
-
-    class MyTableCellRenderer implements TableCellRenderer {
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            return (Component) value;
-        }
     }
 }
 

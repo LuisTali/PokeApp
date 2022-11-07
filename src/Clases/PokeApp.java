@@ -17,29 +17,38 @@ import javax.swing.*;
 
 public class PokeApp {
 
+    ArrayList<Pokemon> lastCharged = new ArrayList<>(); //Guarda los ultimos pokemones cargados.
+    String lastType = "";
     HashSet<String> types = new HashSet<>(); //HashSet permite guardar objetos pero no mantiene su orden.
 
     public Iterator pokemonsByTypeIterator(String type){
-        ArrayList<Pokemon> pkArray = new ArrayList<>();
-
-        try {
-            StringBuilder info = getPokemonsByType(type);
-            JSONObject dataO = new JSONObject(String.valueOf(info));
-            JSONArray array = dataO.getJSONArray("pokemon");
-            //for(int i = 0; i < array.length(); i++){ //En caso de querer todos, descomentar esta linea.
-            if(array.length()>0) {
-                for (int i = 0; i < 20; i++) { //Carga y muestra los primeros 20 para que no tarde tanto en cargarlos.
-                    String name = array.getJSONObject(i).getJSONObject("pokemon").getString("name");
-                    Pokemon pk = getInfoPokemonByName(name);
-                    pkArray.add(pk);
-                }
-            }else {
-                JOptionPane.showMessageDialog(null,"No hay pokemones de ese tipo");
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        //ArrayList<Pokemon> pkArray = new ArrayList<>();
+        if(lastType.equals(type)){
+            return lastCharged.iterator();
         }
-        return pkArray.iterator();
+        else {
+            try {
+                System.out.println("pls wait");
+                StringBuilder info = getPokemonsByType(type);
+                JSONObject dataO = new JSONObject(String.valueOf(info));
+                JSONArray array = dataO.getJSONArray("pokemon");
+                //for(int i = 0; i < array.length(); i++){ //En caso de querer todos, descomentar esta linea.
+                if(array.length()>0) {
+                    lastType = type; //Se setea la variable de la App para que corrobore la proxima vez que se filtra por Type.
+                    lastCharged = new ArrayList<>();
+                    for (int i = 0; i < 20; i++) { //Carga y muestra los primeros 20 para que no tarde tanto en cargarlos.
+                        String name = array.getJSONObject(i).getJSONObject("pokemon").getString("name");
+                        Pokemon pk = getInfoPokemonByName(name);
+                        lastCharged.add(pk);
+                    }
+                }else {
+                    JOptionPane.showMessageDialog(null,"No hay pokemones de ese tipo");
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return lastCharged.iterator();
+        }
     }
 
     public StringBuilder getPokemonsByType(String type){
@@ -135,8 +144,6 @@ public class PokeApp {
             pk.setDefense(defense);
             pk.setSpeed(speed);
             pk.setUrlImage(urlImage);
-
-            System.out.println(pk.toString());
 
         } catch (JSONException e) {
             e.printStackTrace();
